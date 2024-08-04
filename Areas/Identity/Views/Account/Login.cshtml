@@ -1,0 +1,71 @@
+﻿@using ShoppingOnline.Areas.Identity.Models;
+@model LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "";
+}
+
+<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="~/LoginAdminForm/css/style.css">
+<div class="card-body login-card-body">
+   
+  
+        <section class="ftco-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center mb-5">
+                        <h2 class="heading-section">Login Admin</h2>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-6 col-lg-5">
+                        <div class="login-wrap p-4 p-md-5">
+                            <div class="icon d-flex align-items-center justify-content-center">
+                                <span class="fa fa-user-o"></span>
+                            </div>
+                            <h3 class="text-center mb-4">Have an account?</h3>
+                            <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" role="form class="login-form">
+                                <div class="form-group">
+                                    <input asp-for="Email" class="form-control rounded-left" placeholder="Email" required>
+                                   <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                                <div class="form-group d-flex">
+                                    <input asp-for="Password" type="password" class="form-control rounded-left" placeholder="Password" required>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                                <div class="form-group d-md-flex">
+                                    <div class="w-50">
+                                        <label class="checkbox-wrap checkbox-primary">
+                                            @Html.DisplayNameFor(m => m.RememberMe)
+                                            <input asp-for="RememberMe" type="checkbox" >
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <div class="w-50 text-md-right">
+                                        <a asp-action="ForgotPassword">Forgot Password</a>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary rounded submit p-3 px-5">Get Started</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+  
+
+   
+    
+    <script src="~/LoginAdminForm/js/jquery.min.js"></script>
+    <script src="~/LoginAdminForm/js/popper.js"></script>
+    <script src="~/LoginAdminForm/js/bootstrap.min.js"></script>
+    <script src="~/LoginAdminForm/js/main.js"></script>
+    @await Component.InvokeAsync("Notyf")
+</div>

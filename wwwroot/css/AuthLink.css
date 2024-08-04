@@ -1,0 +1,135 @@
+﻿.auth-links{
+    margin-right:8px;
+}
+.auth-links a {
+    color: #888; /* Màu chữ xám nhạt */
+    padding: 5px; /* Khoảng cách giữa chữ và viền */
+    border-bottom: 2px solid #fde0db; /* Gạch dưới chữ với màu đỏ nhạt */
+    text-decoration: none; /* Loại bỏ gạch dưới mặc định */
+    transition: color 0.3s, background-color 0.3s, border-color 0.3s; /* Hiệu ứng chuyển màu mượt mà khi hover */
+    font-weight: 500;
+    font-size: 15px;
+}
+
+    .auth-links a:hover {
+        color: #fe6347; /* Màu chữ đỏ nhạt khi hover */
+        background-color: #fde0db; /* Màu nền hồng nhạt khi hover */
+        border-bottom-color: #fde0db; /* Đổi màu gạch dưới khi hover */
+    }
+
+/* Đặt vị trí tương đối cho phần tử cha */
+.account_fix {
+    position: relative; /* Để các phần tử con có thể được định vị tuyệt đối */
+    display: inline-block; /* Để phần tử cha không chiếm toàn bộ chiều rộng */
+}
+
+/* Ẩn danh sách mặc định */
+.account_selection_fix {
+    display: none; /* Ẩn danh sách khi không hover */
+    position: absolute; /* Đặt danh sách ở vị trí tuyệt đối */
+    top: 100%; /* Đặt danh sách ngay dưới phần tử cha */
+    left: 50%; /* Đặt danh sách ở giữa phần tử cha */
+    transform: translateX(-50%); /* Điều chỉnh vị trí để danh sách căn giữa phần tử cha */
+    background-color: #fff; /* Màu nền của danh sách */
+    border: 1px solid #ddd; /* Viền cho danh sách */
+    border-radius: 4px; /* Bo góc danh sách */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng cho danh sách */
+    z-index: 1000; /* Đảm bảo danh sách nằm trên các phần tử khác */
+    list-style-type: none; /* Loại bỏ dấu chấm từ các mục danh sách */
+    padding: 0; /* Xóa padding của danh sách */
+    margin: 0; /* Xóa margin của danh sách */
+    min-width: 100px; /* Đặt độ rộng tối thiểu cho danh sách */
+}
+
+    /* Tùy chỉnh các mục trong danh sách */
+    .account_selection_fix li {
+        display: flex; /* Sử dụng Flexbox để căn chỉnh các phần tử bên trong */
+        align-items: center; /* Căn giữa các phần tử theo chiều dọc */
+        padding: 8px 12px; /* Padding cho từng mục danh sách */
+    }
+
+        /* Tùy chỉnh liên kết trong danh sách */
+        .account_selection_fix li a {
+            color: #333; /* Màu chữ cho liên kết trong danh sách */
+            text-decoration: none; /* Loại bỏ gạch dưới của liên kết */
+            display: flex; /* Để các phần tử con nằm ngang nhau */
+            align-items: center; /* Căn giữa các phần tử theo chiều dọc */
+            width: 100%; /* Chiếm toàn bộ chiều rộng của mục danh sách */
+        }
+
+            /* Tùy chỉnh các biểu tượng và chữ trong liên kết */
+            .account_selection_fix li a i {
+                margin-right: 8px; /* Khoảng cách giữa biểu tượng và chữ */
+            }
+
+            /* Tùy chỉnh chữ trong liên kết */
+            .account_selection_fix li a p {
+                margin: 0; /* Xóa margin của chữ */
+            }
+
+/* Hiển thị danh sách khi hover vào phần tử cha */
+.account_fix:hover .account_selection_fix {
+    display: block; /* Hiển thị danh sách khi hover vào phần tử cha */
+
+}
+.account_selection li a:hover {
+    background-color: #f5f5f5; /* Màu nền khi hover vào liên kết trong danh sách */
+}
+
+
+
+
+/* box login under user icon */
+.my-auto {
+    position: relative;
+}
+
+.box-login {
+    box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.3);
+    background-color: white;
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: -85px;
+    z-index: 1;
+}
+
+    .box-login::before {
+        content: '';
+        position: absolute;
+        top: -15%;
+        right: 40%;
+        margin-top: -10px;
+        border-width: 20px;
+        border-style: solid;
+        border-color: transparent transparent #fff transparent;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .box-login::after {
+        content: '';
+        position: absolute;
+        top: -15%;
+        right: 0;
+        width: 200px;
+        margin-top: -10px;
+        border-width: 20px;
+        border-style: solid;
+        color: transparent;
+    }
+
+    .box-login ul {
+        list-style-type: none;
+        padding: 0;
+        width: 200px;
+    }
+
+        .box-login ul li {
+            padding: 10px;
+        }
+
+    #user-icon:hover + .box-login,
+    .box-login:hover {
+        display: block;
+        opacity: 1; /* Hiển thị box-login và thay đổi opacity */
+    }

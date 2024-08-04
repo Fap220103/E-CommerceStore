@@ -1,0 +1,130 @@
+﻿@using ShoppingOnline.ViewModels;
+@model ContactViewModel
+@{
+    ViewBag.Title = "Contact";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/contact_styles.css">
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/contact_responsive.css">
+<link href="~/loading/loadinganimation.css" rel="stylesheet" />
+<div class="container contact_container">
+    <div class="row">
+        <div class="col">
+
+            <!-- Breadcrumbs -->
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Contact</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Map Container -->
+    <div class="row">
+        <div class="col">
+            <div id="google_map">
+                <div class="map_container">
+                    <div id="map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14881.759929886586!2d105.92039085171646!3d21.174673736879516!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135067b3bfc4da7%3A0xa79ba583c895933c!2zVsSDbiBNw7NuLCBZw6puIFBob25nLCBC4bqvYyBOaW5oLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1711104654262!5m2!1svi!2s" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Us -->
+    <div class="row">
+        <div class="col-lg-6 contact_col">
+            <div class="contact_contents">
+                <h1>Contact Us</h1>
+                <p>There are many ways to contact us. You may drop us a line, give us a call or send an email, choose what suits you the most.</p>
+                <div class="col">
+                    <p>Tên: Pháp</p>
+                    <p>SDT: 0833220103</p>
+                    <p>Email: phap74427@gmail.com</p>
+                </div>
+            </div>
+
+            <!-- Follow Us -->
+            <div class="follow_us_contents">
+                <h1>Follow Us</h1>
+                <ul class="social d-flex flex-row">
+                    <li><a href="#" style="background-color: #3a61c9"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                    <li><a href="#" style="background-color: #41a1f6"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                    <li><a href="#" style="background-color: #fb4343"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+                    <li><a href="#" style="background-color: #8f6247"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-6 get_in_touch_col">
+            <div class="get_in_touch_contents">
+                <h1>Get In Touch With Us!</h1>
+                <p>Fill out the form below to receive a free and confidential response.</p>
+                <div id="load_send"></div>
+
+                <form asp-action="PostContact" asp-controller="Contact" method="post"
+                      data-ajax="true"
+                      data-ajax-method="POST"                  
+                      data-ajax-begin="OnBegin"
+                      data-ajax-success="OnSuccess"
+                      data-ajax-failure="OnFailure">
+                    <div>
+                        <input id="input_name" asp-for="Name" class="form_input input_name input_ph checkXSS" placeholder="Name" required data-error="Name is required." />
+                        <input id="input_email" asp-for="Email" class="form_input input_email input_ph checkXSS" placeholder="Email" required data-error="Valid email is required." />
+                        <input id="input_website" asp-for="Company" class="form_input input_website input_ph checkXSS" placeholder="Company" required data-error="Company is required." />
+                        <textarea id="input_message" asp-for="Message" class="input_ph input_message checkXSS" placeholder="Message" rows="3" required data-error="Please, write us a message."></textarea>
+                    </div>
+
+                    <div>
+                        <button id="btnSubmitCheck" type="submit" class="red_button message_submit_btn trans_300 btnSend" value="Submit">Send message</button>
+                    </div>
+                    <div id="loading" class="loading-spinner" style="display:none;"></div>
+                </form>
+              
+                 
+                 
+                   
+
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha256-v2nySZafnswY87um3ymbg7p9f766IQspC5oqaqZVX2c=" crossorigin="anonymous"></script>
+   
+    <script src="~/Content/assets/js/contact_custom.js"></script>
+
+    <script>
+     
+        function OnBegin() {
+            $('#btnSubmitCheck').attr("disabled", "disabled");  
+            // $('#load_send').html('<h2 style="color:red">Đang gửi.....</h2>');
+         
+            $('#loading').show();
+        }
+
+        function OnSuccess(res) {
+            $('#btnSubmitCheck').removeAttr("disabled");
+            $('#loading').hide();
+            $('#input_message').val('');
+            if (res.success) {
+                notyf.success("Gửi thành công!!");
+            } else {
+               
+            }
+        }
+
+        function OnFailure() {
+            $('#btnSubmitCheck').removeAttr("disabled");
+            $('#loading').hide();
+            notyf.error("Gửi thất bại!!");
+        }
+    </script>
+}

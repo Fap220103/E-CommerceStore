@@ -1,0 +1,81 @@
+﻿@model AppUser
+@{
+	ViewBag.Title = "Edit Account";
+	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1>Quản lý Account</h1>
+			</div>
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active">Account</li>
+				</ol>
+			</div>
+		</div>
+	</div><!-- /.container-fluid -->
+</section>
+
+
+<!-- Main content -->
+<section class="content">
+
+	<!-- Default box -->
+	<div class="card">
+		<div class="card-header">
+			<h3 class="card-title">Cập nhật Tài khoản</h3>
+
+		</div>
+		<div class="card-body">
+			﻿
+
+			<form method="post" asp-action="Edit">
+				<input asp-for="@Model.Id" hidden />
+				<hr />
+				<div asp-validation-summary="All" class="text-danger"></div>
+
+				<div class="form-group">
+					<label asp-for="UserName"></label>
+					<input asp-for="UserName" class="form-control" />
+					<span asp-validation-for="UserName" class="text-danger"></span>
+				</div>
+
+
+				<div class="form-group">
+					<label asp-for="Email"></label>
+					<input asp-for="Email" readonly class="form-control" />
+					<input asp-for="Email" hidden />
+				</div>
+				<div class="form-group">
+					<label asp-for="PhoneNumber"></label>
+					<input asp-for="PhoneNumber" class="form-control" />
+					<span asp-validation-for="PhoneNumber" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="RoleId"></label>
+					<select asp-for="RoleId" asp-items="@Model.RoleList" class="form-control">
+						<option disabled selected>--Select Role--</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-success">Update</button>
+					<a asp-action="Index" class="btn btn-warning" style="width:auto">Back to User</a>
+				</div>
+			</form>
+			
+		</div>
+	</div>
+	<!-- /.card-body -->
+	<div class="card-footer">
+	</div>
+	<!-- /.card-footer-->
+
+
+
+</section>
+<!-- /.content -->

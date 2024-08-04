@@ -1,0 +1,223 @@
+﻿@model IEnumerable<ProductImage>
+@{
+    ViewBag.Title = "Ảnh sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEmpty.cshtml";
+}
+<link href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" rel="stylesheet">
+<style>
+    .glImage {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+        .glImage li {
+            margin-left: 10px;
+        }
+
+    .box-btn {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .card-body img {
+        width: 200px;
+        height: 200px;
+        margin: 20px;
+    }
+</style>
+<section class="content">
+
+    <div class="card" style="">
+        <div class="card-header">
+            <h3 class="card-title">
+                Ảnh sản phẩm
+            </h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-danger" title="Collapse">
+                    Xóa hết
+                </button>
+                <input type="file" id="fileInput" style="display:none" name="image" />
+                <input type="button" id="iTaiAnh" class="btn btn-primary" value="Tải Ảnh" />
+                @* <input type="button" class="btn btn-success" value="Tải ảnh"  /> *@
+
+            </div>
+        </div>
+        <div class="card-body body-image">
+            <ul class="glImage">
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <li id="trow_@item.Id">
+                            <img src="@item.Image" style="cursor:pointer" />
+                            <div class="box-btn">
+                                <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                                @if (item.IsDefault)
+                                {
+                                    <a href="#" data-id="@item.Id" id="Default" class="btn btn-sm btn-success btnNoDefault">
+                                        <i class="fa fa-check"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="#" data-id="@item.Id" class="btn btn-sm btn-warning btnDefault">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </a>
+                                }
+                              
+                            </div>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        <div class="card-footer">
+        </div>
+    </div>
+
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+
+<script>
+
+    const notyf = new Notyf({
+        duration: 2000, // Thời gian hiển thị thông báo (2 giây)
+        ripple: true,   // Kích hoạt hiệu ứng ripple
+        position: {
+            x: 'right', // Vị trí ngang: 'left' hoặc 'right'
+            y: 'top'    // Vị trí dọc: 'top' hoặc 'bottom'
+        },
+        dismissible: true // Kích hoạt nút đóng
+    });
+    function AddImage(formData) {
+        $.ajax({
+            url: '/admin/productimage/addimage',
+            type: 'POST',
+            data: formData,
+            processData: false, // Đảm bảo không xử lý dữ liệu
+            contentType: false, // Đảm bảo không thiết lập tiêu đề Content-Type
+            success: function (rs) {
+                debugger;
+                console.log(rs);
+                if (rs.success) {
+                    //window.location.reload();
+                    var newImageHtml = `
+                        <li id="trow_${rs.newId}">
+                            <img src="${rs.imageUrl}" style="cursor:pointer" />
+                            <div class="box-btn">
+                                <a href="#" data-id="${rs.newId}" class="btn btn-sm btn-warning btnDefault">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </a>
+                                <a href="#" data-id="${rs.newId}" class="btn btn-sm btn-danger btnDelete">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </div>
+                        </li>`;
+                    $('.glImage').append(newImageHtml);
+                    notyf.success("Thêm thành công!!");
+                }
+                else{
+                    notyf.error("thêm thất bại!!");
+                }
+            }
+        });
+    }
+    $(document).ready(function () {
+        var proId = '@ViewBag.Id';
+        $('#iTaiAnh').click(function () {
+            $('#fileInput').click(); // Mở hộp thoại chọn file
+        });
+
+        $('#fileInput').change(function () {
+           // debugger;
+            var file = this.files[0];
+            if (file) {
+                var formData = new FormData();
+                formData.append('productId', proId);
+                formData.append('image', file);
+
+                AddImage(formData);
+            }
+        });
+        $('body').on('click', '.btnDelete', function () {
+            var id = $(this).data('id');
+            var conf = confirm("bạn có chắc chắn muốn xóa không");
+            if (conf === true) {
+                $.ajax({
+                    url: '/admin/ProductImage/DeleteImage',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        console.log(rs);
+                        if (rs.success) {
+                            notyf.success("Xóa thành công!!");
+                            $('#trow_' + id).remove();
+                        }
+                        else{
+                            notyf.error("Xóa thất bại!!");
+                        }
+                    }
+                });
+            }
+        });
+        $('body').on('click', '.btnDefault', function () {
+            
+            var id = $(this).data('id');
+            var idDefault = $('#Default').attr("data-id");
+
+            //var chuoi = String(idDefault);
+            var conf = confirm("bạn có chắc chắn muốn thay đổi không");
+            if (conf === true) {
+                idDefault = (typeof idDefault !== 'undefined') ? idDefault : -1;
+                $.ajax({
+                    url: '/admin/ProductImage/ChangeDefault',
+                    type: 'POST',
+                    data: { id: id, idDefault: idDefault },
+                    success: function (rs) {    
+                        console.log(rs);
+                        if (rs.success) {
+                            notyf.success("sửa thành công!!");
+                            var currentButton = $(`[data-id=${id}].btnDefault`);
+                            if (currentButton.hasClass('btnDefault')) {
+                                currentButton.removeClass('btn-warning btnDefault').addClass('btn-success btnNoDefault').html('<i class="fa fa-check"></i>');
+                                currentButton.attr('id', 'Default');
+                            } else {
+                                currentButton.removeClass('btn-success btnNoDefault').addClass('btn-warning btnDefault').html('<i class="fa-solid fa-xmark"></i>');
+                                currentButton.removeAttr('id');
+                            }
+                            console.log('Current button updated:', currentButton);
+                            // Đổi class và icon của nút trước đó
+                            if (idDefault != -1) {
+                                var previousButton = $(`[data-id=${idDefault}].btnNoDefault`);
+                                if (previousButton.hasClass('btnNoDefault')) {
+                                    previousButton.removeClass('btn-success btnNoDefault').addClass('btn-warning btnDefault').html('<i class="fa-solid fa-xmark"></i>');
+                                } else {
+                                    previousButton.removeClass('btn-warning btnDefault').addClass('btn-success btnNoDefault').html('<i class="fa fa-check"></i>');
+                                }
+                                previousButton.removeAttr('id');
+                                console.log('Previous button updated:', previousButton);
+                            }
+
+                            // Cập nhật idDefault mới sau khi thay đổi
+                            //$('#Default').attr("data-id", id);
+                            console.log('Updated data-id for Default:', id);
+                            //window.location.reload();
+                          
+                        }
+                        else {
+                            notyf.error("sửa thất bại!!");
+                        }
+                    }
+                });
+            }
+        });
+
+    });
+</script>

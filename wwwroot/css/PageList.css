@@ -1,0 +1,31 @@
+﻿.pagination-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination-controls {
+    text-align: right;
+}
+
+.page-link {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #007bff;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    .page-link:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+.page-info {
+    margin: 0 10px;
+    font-weight: bold;
+}

@@ -1,0 +1,77 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using ShoppingOnline.ViewModels;
+@model LoginViewModel
+@inject SignInManager<AppUser> signInManager
+@{
+    ViewData["Title"] = "Login";
+}
+
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css" asp-append-version="true">
+<div class="row" style="margin-top:160px">
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <h2 id="title">@ViewBag.Title</h2>
+                <form asp-action="Login">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group d-md-flex" style="margin-top:15px">
+                        <div class="w-50">
+                            <label class="checkbox-wrap checkbox-primary">
+                                @Html.DisplayNameFor(m => m.RememberMe)
+                                <input asp-for="RememberMe" type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>                    
+                    </div>
+                    <div class="form-group" style="margin-top:15px">
+                        <input class="btn btn-outline-success float right" type="submit" value="Log in" />
+                    </div>
+                    <div class="form-group" style="margin-top:15px">
+                        <div class="col-md-10">
+                            <p style="display:flex; justify-content:space-between">
+                                <a href="/account/Register">Đăng ký</a>
+                                <a href="/account/forgotpassword">Quên mật khẩu</a>
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @{
+        var schemes = await signInManager.GetExternalAuthenticationSchemesAsync();
+        var loginProivders = schemes.ToList();
+    }
+    @if (loginProivders.Count() > 0)
+    {
+        <div class="col-md-4">
+            <section>
+                <h4>User another service to log in.</h4>
+                <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" role="form">
+                    <div>
+                        <p>
+                            @foreach (var provider in loginProivders)
+                            {
+
+                                <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name"
+                                        title="Log in using your @provider.Name account">
+                                    @provider.Name
+                                </button>
+                            }
+                        </p>
+                    </div>
+                </form>
+            </section>
+        </div>
+    }
+</div>

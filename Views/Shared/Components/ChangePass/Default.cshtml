@@ -1,0 +1,34 @@
+﻿@using ShoppingOnline.ViewModels;
+@model ChangePassViewModel
+<h2>Đổi mật khẩu</h2>
+<form asp-action="ChangePass" asp-controller="Account" method="post"
+	  data-ajax="true"
+	  data-ajax-method="POST"
+	  data-ajax-begin="OnBeginCPs"
+	  data-ajax-success="OnSuccessCPs"
+	  data-ajax-failure="OnFailureCPs">
+	<hr />
+	<div asp-validation-summary="All" class="text-danger"></div>
+
+	<div class="form-group">
+		<label asp-for="OldPassword"></label>
+		<input asp-for="OldPassword" class="form-control" />
+		<span asp-validation-for="OldPassword" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="NewPassword"></label>
+		<input asp-for="NewPassword" class="form-control" />
+		<span asp-validation-for="NewPassword" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="ConfirmPassword"></label>
+		<input asp-for="ConfirmPassword" class="form-control" />
+		<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+	</div>
+
+	<div class="form-group">
+		<button type="submit" class="btn btn-outline-success" style="margin-top:15px" id="btnSubmit">Change Password</button>
+		@* <a asp-action="Index" class="btn btn-warning" style="width:auto">Back to User</a> *@
+	</div>
+	<div id="loading" class="loading-spinner" style="display:none;"></div>
+</form>

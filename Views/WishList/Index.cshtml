@@ -1,0 +1,125 @@
+﻿@using PagedList.Core;
+@model IPagedList<WishList>
+
+@using ShoppingOnline.Helpers
+@{
+    ViewBag.Title = "Danh sách yêu thích";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+<link href="~/css/pagelist.css" rel="stylesheet" />
+<style>
+    .news_section_container {
+        margin-top: 180px;
+    }
+
+    .title-news {
+        font-size: 24px;
+        border-bottom: 1px solid;
+        padding: 15px 0;
+        margin-bottom: 25px;
+    }
+
+    .img-box img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .row-item-new {
+        margin-bottom: 20px;
+    }
+</style>
+<div class="container news_section_container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="title-news">Danh sách yêu thích</h1>
+        </div>
+    </div>
+
+    <table class="table">
+        <tr class="text-center">
+            <th>STT</th>
+            <th>Ảnh</th>
+            <th>Tên sản phẩm</th>
+            <th>Giá</th>
+            <th style="width:100px"></th>
+        </tr>
+        @if (Model != null && Model.Any())
+        {
+            var i = ((Model.PageNumber - 1) * Model.PageSize) + 1;
+            foreach (var item in Model)
+            {
+
+                <tr class="text-center" id="trow_@item.ProductId">
+                    <td>@i</td>
+                    <td><img src="@item.Product.Image" width="100" /></td>
+                    <td>
+                        <a href="/chi-tiet/@item.Product.Alias-p@(item.ProductId)">
+                            @item.Product.Title
+                        </a>
+
+                    </td>
+                    <td>@Common.FormatNumber(item.Product.Price, 0)</td>
+                    <td>
+                        <a href="#" data-id="@item.ProductId" class="btn btn-sm btn-danger btnDeleteFav">Xóa</a>
+                    </td>
+                </tr>
+                i++;
+            }
+
+        }
+        else
+        {
+            <tr>
+                <th colspan="7">Không có sản phẩm trong danh sách yêu thích</th>
+            </tr>
+        }
+
+    </table>
+
+    <div class="row">
+        <div class="col-6"></div>
+        <div class="col-6 pagination-controls">
+            @if (Model.HasPreviousPage)
+            {
+                <a href="?page=@(Model.PageNumber - 1)&pageSize=@Model.PageSize" class="page-link">Previous</a>
+            }
+
+            <span class="page-info">Page @Model.PageNumber of @Model.PageCount</span>
+
+            @if (Model.HasNextPage)
+            {
+                <a href="?page=@(Model.PageNumber + 1)&pageSize=@Model.PageSize" class="page-link">Next</a>
+            }
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '.btnDeleteFav', function () {
+                var conf = confirm('Bạn có chắc chắn muốn xóa không!')
+                var id = $(this).data('id');
+                console.log(id);
+                if (conf == true) {
+                    $.ajax({
+                        url: '/wishlist/postdeletewishlist',
+                        type: 'POST',
+                        data: { ProductId: id },
+                        success: function (res) {
+                            console.log(res);
+                            if (res.success) {
+                                $('#trow_' + id).remove();
+                                notyf.success("Xóa thành công");
+                            }
+                            else {
+                                notyf.error("Xóa thất bại");
+                            }
+                        }
+                    });
+                }
+            })
+        })
+
+    </script>
+    }

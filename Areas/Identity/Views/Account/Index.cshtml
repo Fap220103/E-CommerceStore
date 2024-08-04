@@ -1,0 +1,195 @@
+﻿@model IEnumerable<AppUser>
+@{
+	ViewBag.Title = "Quản lý tài khoản";
+	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+@section naviheader{
+	<!-- Left navbar links -->
+	<ul class="navbar-nav">
+		<li class="nav-item">
+			<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+		</li>
+		<li class="nav-item d-none d-sm-inline-block">
+			<a href="/admin/home" class="nav-link">Trang chủ</a>
+		</li>
+		<li class="nav-item d-none d-sm-inline-block">
+			<a href="/admin/account" class="nav-link">@ViewBag.Title</a>
+		</li>
+	</ul>
+}
+
+
+
+<!-- Main content -->
+<section class="content">
+
+	<!-- Default box -->
+	<div class="card">
+		<div class="card-header">
+			<h3 class="card-title">Danh sách Tài khoản</h3>
+			<div class="card-tools">
+				<a href="/identity/account/Register" class="btn btn-success">Thêm mới</a>
+			</div>
+		</div>
+		<div class="card-body">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Email</th>
+						<th>User Name</th>
+						<th>Phone</th>
+						<th>Email</th>
+						<th>Role</th>
+						<th>Trạng thái</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					@if (Model != null && Model.Any())
+					{
+						var i = 1;
+						foreach (var item in Model)
+						{
+							<tr id="trow_@item.Id">
+								<td>@i</td>
+								<td>@item.Email</td>
+								<td>@item.UserName</td>
+								<td>@item.PhoneNumber</td>
+								<td>@item.Email</td>
+								<td>@item.Role</td>
+								<td id="updateStatus" data-email="@item.Email">
+									@if (item.Status == 1)
+									{
+										<span>Hoạt động</span>
+									}
+									else if (item.Status == 2)
+									{
+										<span>Bị khóa</span>
+									}
+									else if (item.Status == 3)
+									{
+										<span>Bị vô hiệu hóa</span>
+									}
+								</td>
+								<td>
+									<a asp-area="Identity" asp-controller="Account" asp-action="Edit" asp-route-userId="@item.Id" class="btn btn-sm btn-primary">Sửa</a>
+									<a href="#" data-email="@item.Email" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xóa</a>
+									<a href="#" class="btn btn-sm btn-primary btnCapNhatTT" data-email="@item.Email">Cập nhật trạng thái</a>
+								</td>
+							</tr>
+							i++;
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<!-- /.card-body -->
+	<div class="card-footer">
+	</div>
+	<!-- /.card-footer-->
+	<!-- /.content -->
+	<div class="modal fade" id="modal-default">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Cập nhật trạng thái</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<input type="hidden" id="txtUserId" value="0" />
+					<div class="form-group">
+						<label>Trạng thái</label>
+						<select class="form-control" id="ddTrangThai">
+							<option value="1">Hoạt động</option>
+							<option value="2">Bị khóa</option>
+							<option value="3">Bị vô hiệu hóa</option>
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer justify-content-between">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+					<button type="button" class="btn btn-primary" id="btnLuu">Lưu</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+
+
+</section>
+<!-- /.content -->
+@section scripts{
+	<script>
+		$(document).ready(function () {
+			$('.btnDelete').click(function () {
+				var email = $(this).data('email');
+
+				var conf = confirm("Bạn có chắc chắn muốn xóa tài khoản này không?");
+				if (conf == true) {
+					$.ajax({
+						url: '/identity/account/DeleteAccount',
+						type: 'POST',
+						data: { email: email },
+						success: function (res) {
+							if (res.Success) {
+								$('#trow_' + id).remove();
+								notyf.success('Cập nhật thành công');
+							}
+							else {
+								notyf.error('Cập nhật thất bại');
+							}
+						}
+					})
+				}
+
+			});
+			$('body').on('click', '.btnCapNhatTT', function () {
+				var email = $(this).data("email");
+
+				$('#txtUserId').val(email);
+				$('#modal-default').modal('show');
+			});
+
+			$('body').on('click', '#btnLuu', function (e) {
+
+				var email = $('#txtUserId').val();
+				var tt = $('#ddTrangThai').val();
+				$.ajax({
+					url: '/identity/Account/UpdateTT',
+					type: 'POST',
+					data: { email: email, trangthai: tt },
+					success: function (res) {
+						if (res.success) {
+							console.log(res);
+							console.log(res.statusUser);
+							var updateStatus = $('#updateStatus[data-email="' + email + '"]');
+							if(res.statusUser == 1){
+								updateStatus.html("Hoạt động");
+							}
+							else if (res.statusUser == 2) {
+								updateStatus.html("Bị khóa");
+							}
+							else if (res.statusUser == 3) {
+								updateStatus.html("Bị vô hiệu hóa");
+							}
+							// Hiển thị thông báo thành công
+							notyf.success('Cập nhật trạng thái thành công');
+
+							$('#modal-default').modal('hide');
+						} else {
+							notyf.error('Cập nhật trạng thái không thành công');
+						}
+					}
+				});
+			});
+		})
+	</script>
+}
+

@@ -1,0 +1,21 @@
+﻿<!-- Views/Shared/Components/MenuTop/Default.cshtml -->
+@model IEnumerable<ShoppingOnline.Models.Category>
+
+@if (Model != null && Model.Any())
+{
+    <ul class="navbar_menu">
+        @foreach (var item in Model)
+        {
+            if (item.Alias.Equals("trang-chu"))
+            {
+                item.Alias = "";
+            }
+            if (!string.IsNullOrEmpty(item.Link))
+            {
+                item.Alias = item.Link;
+            }
+            <li><a href="/@item.Alias">@item.Title</a></li>
+        }
+    </ul>
+}
+

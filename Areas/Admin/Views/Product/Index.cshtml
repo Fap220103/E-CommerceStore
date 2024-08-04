@@ -1,0 +1,334 @@
+﻿@using PagedList.Core;
+
+@model IPagedList<Product>
+@{
+    ViewBag.Title = "Sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<link href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" rel="stylesheet">
+<link href="~/css/pagelist.css" rel="stylesheet" />
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/home" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/news" class="nav-link">@ViewBag.Title</a>
+        </li>
+    </ul>
+}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Quản lý @ViewBag.Title</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">@ViewBag.Title</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Danh sách @ViewBag.Title</h3>
+
+            <div class="card-tools">
+                @* <a href="/admin/products/ExportExcel_EPPLUS" class="btn btn-success">Xuất Excel</a> *@
+                <a asp-area ="Admin" asp-controller="Product" asp-action="add" class="btn btn-primary">Thêm mới</a>
+                <a href="#" class="btn btn-danger" id="BtnDeleteAll">Xóa</a>
+            </div>
+        </div>
+        <div class="card-body">
+            @*<div class="row">
+            <div class="col-12">
+            @using (Html.BeginForm("Index", "News", FormMethod.Get, new { }))
+            {
+            <div class="input-group input-group-sm">
+            @Html.TextBox("Searchtext")
+            <span class="input-group-append">
+            <button type="submit" class="btn btn-info btn-flat">Tìm kiếm</button>
+            </span>
+            </div>
+            }
+            </div>
+            </div>*@
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="SelectAll" /></th>
+                        <th>STT</th>
+
+                        <th>Hình ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Danh mục</th>
+                        <th>Số lượng</th>
+                        <th>Giá</th>
+                        <th>Ngày tạo</th>
+                        <th>Home</th>
+                        <th>Sale</th>
+                        <th>Hiển thị</th>
+                        <th style="width:150px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        var i = ((Model.PageNumber - 1) * Model.PageSize) + 1;
+                        foreach (var item in Model)
+                        {
+                            var strCheck = item.IsActive ? "<i class='fa fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>";
+                            var strCheckHome = item.IsHome ? "<i class='fa fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>";
+                            var strCheckSale = item.IsSale ? "<i class='fa fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>";
+                        
+                            var strImg = item.ProductImage.FirstOrDefault(x => x.IsDefault)?.Image ?? "/Content/img/SanPham/h0.png";
+
+                            <tr id="trow_@item.Id">
+                                <td><input type="checkbox" class="chkItem" value="@item.Id" /></td>
+                                <td>@i</td>
+                                <td><img style="cursor:pointer" class="imgproduct" data-id="@item.Id" src="@strImg" width="50" /></td>
+
+                                <td>@item.Title</td>
+                                <td>@item.ProductCategory.Title</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Price</td>
+                                <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+                                <td class="text-center">
+                                    <a href='#' data-id="@item.Id" class="btnHome">@Html.Raw(strCheckHome)</a>
+                                </td>
+                                <td class="text-center">
+                                    <a href='#' data-id="@item.Id" class="btnSale">@Html.Raw(strCheckSale)</a>
+                                </td>
+                                <td class="text-center">
+                                    <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck)</a>
+                                </td>
+                                <td>
+                                    <a asp-area="Admin" asp-controller="Product" asp-action="edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Sửa</a>
+                                    <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xóa</a>
+                                </td>
+
+                            </tr>
+                            i++;
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">Không có bản ghi nào</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-6"></div>
+                <div class="col-6 pagination-controls">
+                    @if (Model.HasPreviousPage)
+                    {
+                        <a href="?page=@(Model.PageNumber - 1)&pageSize=@Model.PageSize" class="page-link">Previous</a>
+                    }
+
+                    <span class="page-info">Page @Model.PageNumber of @Model.PageCount</span>
+
+                    @if (Model.HasNextPage)
+                    {
+                        <a href="?page=@(Model.PageNumber + 1)&pageSize=@Model.PageSize" class="page-link">Next</a>
+                    }
+                </div>
+            </div>
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+<div id="dialog">
+    <iframe id="myIframe" style="border:0;width:100%;height:100%;">
+    </iframe>
+</div>
+
+@section scripts{
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <script>
+        const notyf = new Notyf({
+            duration: 2000, // Thời gian hiển thị thông báo (2 giây)
+            ripple: true,   // Kích hoạt hiệu ứng ripple
+            position: {
+                x: 'right', // Vị trí ngang: 'left' hoặc 'right'
+                y: 'top'    // Vị trí dọc: 'top' hoặc 'bottom'
+            },
+            dismissible: true // Kích hoạt nút đóng
+        });
+        $(document).ready(function () {
+            $("#dialog").dialog({
+                autoOpen: false,
+                show: "fade",
+                hide: "fade",
+                modal: true,
+                height: '600',
+                width: '900',
+                resizeable: true,
+                title: 'Quản lý ảnh sản phẩm',
+                close: function () {
+                    window.location.reload();
+                }
+            });
+            $('body').on('click', '.imgproduct', function () {
+                var proid = $(this).attr("data-id");
+                $('#dialog #myIframe').attr("src", "/admin/ProductImage/Index?proId=" + proid);
+                $('#dialog').dialog('open');
+                return false;
+            });
+            //xoa all
+            $('body').on('click', '#BtnDeleteAll', function (e) {
+                e.preventDefault();
+                var str = "";
+                var checkbox = $(this).parents('.card').find('tr td input:checkbox');
+                var i = 0;
+                checkbox.each(function () {
+                    if (this.checked) {
+                        checkbox.attr('selected', 'checked');
+                        var _id = $(this).val();
+                        if (i === 0) {
+                            str += _id;
+                        }
+                        else {
+                            str += "," + _id;
+                        }
+                        i++;
+                    }
+                    else {
+                        checkbox.attr('selected', '');
+                    }
+                });
+                if (str.length > 0) {
+                    var conf = confirm('Bạn có chắc chắn muốn xoá không?');
+                    if (conf === true) {
+                        $.ajax({
+                            url: '/admin/product/deleteAll',
+                            type: 'POST',
+                            data: { ids: str },
+                            success: function (rs) {
+                                if (rs.success) {
+                                    location.reload();
+                                }
+                            }
+                        })
+                    }
+                }
+            })
+            // checked checkbox
+            $('body').on('change', '#SelectAll', function () {
+                var checkStatus = this.checked;
+                var checkbox = $(this).parents('.card-body').find('tr td input:checkbox');
+                checkbox.each(function () {
+                    this.checked = checkStatus;
+                    if (this.checked) {
+                        checkbox.attr('selected', 'checked');
+                    }
+                    else {
+                        checkbox.attr('selected', '');
+                    }
+                })
+            })
+            //xoa 1 ban ghi
+            $('body').on('click', '.btnDelete', function () {
+                var id = $(this).data("id");
+                var conf = confirm('Bạn có chắc chắn muốn xóa không?');
+                if (conf === true) {
+                    $.ajax({
+                        url: '/admin/product/Delete',
+                        type: 'POST',
+                        data: { id: id },
+                        success: function (rs) {
+                            if (rs.success) {
+                                notyf.success("Xóa thành công!!");
+                                $('#trow_' + id).remove();
+                            }
+                        }
+                    });
+                }
+            })
+            // bat/tat icon
+            $('.btnActive').click(function (e) {
+                e.preventDefault();
+                var btn = $(this);
+                var id = btn.data("id");
+                $.ajax({
+                    url: '/admin/product/IsActive',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            if (rs.isActive) {
+                                btn.html("<i class='fa fa-check text-success'></i>");
+                            } else {
+                                btn.html("<i class='fas fa-times text-danger'></i>");
+                            }
+                        }
+                    }
+                });
+            });
+            // bat/tat home
+            $('.btnHome').click(function (e) {
+                e.preventDefault();
+                var btn = $(this);
+                var id = btn.data("id");
+                $.ajax({
+                    url: '/admin/product/IsHome',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            if (rs.isHome) {
+                                btn.html("<i class='fa fa-check text-success'></i>");
+                            } else {
+                                btn.html("<i class='fas fa-times text-danger'></i>");
+                            }
+                        }
+                    }
+                });
+            });
+            // bat/tat sale
+            $('.btnSale').click(function (e) {
+                e.preventDefault();
+                var btn = $(this);
+                var id = btn.data("id");
+                $.ajax({
+                    url: '/admin/product/IsSale',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            if (rs.isSale) {
+                                btn.html("<i class='fa fa-check text-success'></i>");
+                            } else {
+                                btn.html("<i class='fas fa-times text-danger'></i>");
+                            }
+                        }
+                    }
+                });
+            });
+        })
+    </script>
+}

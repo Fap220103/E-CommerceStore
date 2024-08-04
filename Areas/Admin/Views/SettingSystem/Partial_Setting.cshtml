@@ -1,0 +1,111 @@
+﻿@using ShoppingOnline.Areas.Admin.Models;
+@using ShoppingOnline.Helpers
+@model SettingSystemViewModel
+
+
+@* <link href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" rel="stylesheet"> *@
+<form id="yourFormId" method="post" action="AddSetting" enctype="multipart/form-data">
+	<div class="row">
+		<div class="col-md-12">
+			<!-- your steps content here -->
+			<div class="card">
+				<div class="card-header p-2">
+					<ul class="nav nav-pills">
+						<li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Thông tin chung</a></li>
+						<li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">SEO</a></li>
+					</ul>
+				</div><!-- /.card-header -->
+
+				<div class="card-body">
+					<div class="tab-content">
+						<div class="active tab-pane" id="activity">
+							<div class="form-group">
+								<label asp-for="SettingTitle">Tiêu đề trang</label>
+								<input type="text" asp-for="SettingTitle" class="form-control" value="@ViewBag.SettingTitle" />
+							</div>
+							<div class="form-group">
+								<label asp-for="SettingLogo">Logo</label>
+								<div class="input-group">
+
+									<input asp-for="SettingLogo" type="file" class="form-control" placeholder="Logo" value="@ViewBag.SettingLogo" />
+									<span asp-validation-for="SettingLogo" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label asp-for="SettingHotline">Hotline</label>
+								<input type="text" asp-for="SettingHotline" class="form-control" value="@ViewBag.SettingHotline" />
+							</div>
+							<div class="form-group">
+								<label asp-for="SettingEmail">Email</label>
+								<input type="text" asp-for="SettingEmail" class="form-control" value="@ViewBag.SettingEmail" />
+							</div>
+						</div><!-- /.tab-pane -->
+
+						<div class="tab-pane" id="settings">
+							<div class="form-group">
+								<label asp-for="SettingTitleSeo">Tiêu đề Seo</label>
+								<input type="text" asp-for="SettingTitleSeo" class="form-control" value="@ViewBag.SettingTitleSeo" />
+							</div>
+							<div class="form-group">
+								<label asp-for="SettingDesSeo">Mô tả Seo</label>
+								<input type="text" asp-for="SettingDesSeo" class="form-control" value="@ViewBag.SettingDesSeo" />
+							</div>
+							<div class="form-group">
+								<label asp-for="SettingKeySeo">Từ khóa Seo</label>
+								<input type="text" asp-for="SettingKeySeo" class="form-control" value="@ViewBag.SettingKeySeo" />
+							</div>
+						</div><!-- /.tab-pane -->
+					</div><!-- /.tab-content -->
+				</div><!-- /.card-body -->
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btnSave">Lưu</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+
+
+@section Scripts {
+	@* <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+	<script>
+		const notyf = new Notyf({
+			duration: 2000, // Thời gian hiển thị thông báo (2 giây)
+			ripple: true,   // Kích hoạt hiệu ứng ripple
+			position: {
+				x: 'right', // Vị trí ngang: 'left' hoặc 'right'
+				y: 'top'    // Vị trí dọc: 'top' hoặc 'bottom'
+			},
+			dismissible: true // Kích hoạt nút đóng
+		});
+		$(document).ready(function () {
+			$('body').on('click', '.btnSave', function () {
+				e.preventDefault();
+
+				var form = $('#yourFormId')[0];
+				var formData = new FormData(form);
+				formData.append(SettingSystemViewModel);
+				$.ajax({
+					url: '/admin/SettingSystem/AddSetting',
+					type: 'POST',
+					data: formData,
+					processData: false,
+					contentType: false,
+					success: function (rs) {
+						console.log(rs);
+						if (rs.success) {
+							notyf.success("Lưu thành công!!");
+
+						}
+						else {
+							notyf.error("Lưu thất bại!!");
+						}
+					}
+				});
+			}
+						});
+					}
+	</script> *@
+}
+

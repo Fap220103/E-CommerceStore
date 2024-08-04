@@ -1,0 +1,30 @@
+﻿@model IEnumerable<ReviewProduct>
+<div class="tab_title reviews_title">
+    <h4>Reviews (@ViewBag.Count)</h4>
+</div>
+
+<!-- User Review -->
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <div class="user_review_container d-flex flex-column flex-sm-row">
+            <div class="user">
+                <div class="user_pic"></div>
+                <div class="user_rating">
+                    <ul class="star_rating">
+                        @Html.Raw(ShoppingOnline.Helpers.Common.HtmlRate(item.Rate))
+                    </ul>
+                </div>
+            </div>
+            <div class="review">
+                <div class="review_date">@item.CreatedDate.ToString("dd/MM/yyyy")</div>
+                <div class="user_name">@item.FullName</div>
+                <p>@item.Content</p>
+            </div>
+        </div>
+    }
+
+}
+
+

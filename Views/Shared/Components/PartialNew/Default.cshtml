@@ -1,0 +1,46 @@
+﻿@model IEnumerable<News>
+<style>
+    .short-line {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        /*Thêm các thuộc tính tương tự cho các trình duyệt khác nhau (nếu cần)*/
+        display: -moz-box;
+        -moz-line-clamp: 3;
+        -moz-box-orient: vertical;
+        display: -o-box;
+        -o-line-clamp: 3;
+        -o-box-orient: vertical;
+    }
+
+</style>
+@if (Model != null && Model.Any())
+{
+    <div class="blogs">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <div class="section_title">
+                        <h2>Latest Blogs</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row blogs_container">
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-4 blog_item_col">
+                        <div class="blog_item">
+                            <div class="blog_background" style="background-image:url(@item.Image)"></div>
+                            <div class="blog_content d-flex flex-column align-items-center justify-content-center text-center">
+                                <h4 class="blog_title short-line">@item.Title</h4>
+                                <span class="blog_meta">by @item.CreatedBy | @item.CreatedDate.ToString("MMM dd,yyyy")</span>
+                                <a class="blog_more" href="/tin-tuc/@item.Alias-n @item.Id">Read more</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

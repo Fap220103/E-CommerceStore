@@ -1,0 +1,46 @@
+﻿@model ReviewProduct
+<link href="~/loading/loadinganimation.css" rel="stylesheet" />
+<div class="add_review">
+    <form asp-action="PostReview" asp-controller="Review" id="review_form" method="post"
+          data-ajax="true"
+          data-ajax-method="POST"
+          data-ajax-begin="OnBegin"
+          data-ajax-success="OnSuccess"
+          data-ajax-failure="OnFailure">
+        @* Sử dụng TagHelper cho AntiForgeryToken *@
+        <input type="hidden" asp-antiforgery="true" />
+
+        <div>
+            <h1>Add Review</h1>
+            <input asp-for="FullName" class="form_input input_name" placeholder="Name" required />
+            <input asp-for="Email" class="form_input input_email" placeholder="Email" required />
+            <input asp-for="UserName" type="hidden" />
+            <input asp-for="ProductId" type="hidden" data-id="@Model.ProductId" id="product-id"/>
+            <input type="text" id="txtRate" name="Rate" value="4" style="visibility:hidden" />
+        </div>
+
+        <div>
+            <h1>Your Rating:</h1>
+            <ul class="user_star_rating">
+                <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+            </ul>
+            <textarea asp-for="Content" class="input_review" rows="4" placeholder="Your Review" required></textarea>
+        </div>
+
+        <div class="text-left text-sm-right">
+            <button id="review_submit" type="submit" class="red_button review_submit_btn trans_300">Submit</button>
+        </div>
+        <div id="loading" class="loading-spinner" style="display:none;"></div>
+    </form>
+</div>
+
+@section scripts{
+    <script src="~/Content/assets/js/single_custom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha256-v2nySZafnswY87um3ymbg7p9f766IQspC5oqaqZVX2c=" crossorigin="anonymous"></script>
+
+
+}

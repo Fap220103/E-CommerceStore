@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Order>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="title-news">Danh sách đơn hàng</h2>
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Mã đơn hàng</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Ngày tạo</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                var i = 0;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@item.Code</td>
+                        <td>@ShoppingOnline.Helpers.Common.FormatNumber(item.TotalAmount, 0)</td>
+                        <td>
+                            @(item.TypePayment == 1 ? "Chờ thanh toán:" : "Đã thanh toán")
+                        </td>
+                        <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+
+                    </tr>
+                    i++;
+                }
+            }
+        </tbody>
+    </table>
+
+
+</div>

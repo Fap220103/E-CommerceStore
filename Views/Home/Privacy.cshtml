@@ -1,0 +1,137 @@
+﻿@using static ShoppingOnline.Controllers.HomeController;
+@model IEnumerable<Province>
+@{
+	ViewData["Title"] = "Order Address";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css" asp-append-version="true">
+<h2>Select Address</h2>
+<h1> man anh phap </h1>
+<form method="post" id="submitForm">
+	<div>
+		<label for="province">Province:</label>
+		<select id="province" name="province">
+			<option value="">Select Province</option>
+			<!-- Options will be populated by JavaScript -->
+		</select>
+	</div>
+
+	<div>
+		<label for="district">District:</label>
+		<select id="district" name="district" disabled>
+			<option value="">Select District</option>
+			<!-- Options will be populated by JavaScript -->
+		</select>
+	</div>
+
+	<div>
+		<label for="ward">Ward:</label>
+		<select id="ward" name="ward" disabled>
+			<option value="">Select Ward</option>
+			<!-- Options will be populated by JavaScript -->
+		</select>
+	</div>
+	<button type="submit">Submit</button>
+</form>
+<div>
+	<form method="post" asp-action="Privacy" asp-controller="Home">
+		<!-- Các trường form khác -->
+		<button type="submit">Submit</button>
+	</form>
+</div>
+<!-- Add jQuery from CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		// Load provinces
+		$.ajax({
+			url: "/Home/GetProvinces",
+			type: "GET",
+			success: function (provinces) {
+				console.log(provinces);
+
+				var $provinceSelect = $("#province");
+
+				$provinceSelect.empty().append(new Option("Select Province", ""));
+				//debugger;
+				provinces.forEach(function (province) {
+					$provinceSelect.append(new Option(province.name, province.id));
+				});
+			},
+			error: function (xhr, status, error) {
+				console.error("Error loading provinces: ", error);
+			}
+		});
+
+		// Load districts when province changes
+		$("#province").change(function () {
+			var provinceId = $(this).val();
+			if (provinceId) {
+				$.ajax({
+					url: "/Home/GetDistricts",
+					data: { provinceId: provinceId },
+					type: "GET",
+					success: function (districts) {
+						console.log(districts);
+						var $districtSelect = $("#district");
+						$districtSelect.empty().append(new Option("Select District", ""));
+						if(districts.length > 0 ){
+							districts.forEach(function (district) {
+								$districtSelect.append(new Option(district.name, district.id));
+							});
+							$districtSelect.prop('disabled', false);
+							$("#ward").empty().append(new Option("Select Ward", "")).prop('disabled', true); // Clear ward options
+						}
+						else{
+							$districtSelect.empty().append(new Option("Khong co", ""));
+						}
+					},
+					error: function (xhr, status, error) {
+						console.error("Error loading districts: ", error);
+					}
+				});
+			} else {
+				$("#district").empty().append(new Option("Select District", "")).prop('disabled', true);
+				$("#ward").empty().append(new Option("Select Ward", "")).prop('disabled', true);
+			}
+		});
+
+		// Load wards when district changes
+		$("#district").change(function () {
+			var districtId = $(this).val();
+			if (districtId) {
+				$.ajax({
+					url: "/Home/GetWards",
+					data: { districtId: districtId },
+					type: "GET",
+					success: function (wards) {
+						console.log(wards);
+						var $wardSelect = $("#ward");
+						$wardSelect.empty().append(new Option("Select Ward", ""));
+						wards.forEach(function (ward) {
+							$wardSelect.append(new Option(ward.name, ward.id));
+						});
+						$wardSelect.prop('disabled', false);
+					},
+					error: function (xhr, status, error) {
+						console.error("Error loading wards: ", error);
+					}
+				});
+			} else {
+				$("#ward").empty().append(new Option("Select Ward", "")).prop('disabled', true);
+			}
+		});
+		$('#submitForm').submit(function (event) {
+			//event.preventDefault();
+			// var $provinceSelect = $("#province").val().innerText;
+			// var $districtSelect = $("#district");
+			// var $wardSelect = $("#ward");
+			var provinceId = $("#province").val();
+			var provinceName = $("#province option:selected").text();
+			var $districtId = $("#district").val();
+			var $districtName = $("#district option:selected").text();
+			var $wardId = $("#ward").val();
+			var $wardName = $("#ward option:selected").text();
+			console.log($wardName + ',' + $districtName + ',' + provinceName);
+		});
+	});
+</script>

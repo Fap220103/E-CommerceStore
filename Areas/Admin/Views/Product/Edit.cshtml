@@ -1,0 +1,253 @@
+﻿@using ShoppingOnline.Areas.Admin.Models;
+@model EditProductViewModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/home" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/products" class="nav-link">Sản phẩm</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="#" class="nav-link">Cập nhật</a>
+        </li>
+    </ul>
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Cập nhật Sản phẩm</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Sản phẩm</a></li>
+                    <li class="breadcrumb-item active">Cập nhật</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- /.content -->
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Thông tin Cập nhật sản phẩm</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                   
+                        <form method="post" action="Edit">
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="CreatedDate" />
+                            <input type="hidden" asp-for="Image" />
+                        <!-- your steps content here -->
+                        <div class="card">
+                            <div class="card-header p-2">
+                                <ul class="nav nav-pills">
+                                    <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Thông tin chung</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">SEO</a></li>
+                                </ul>
+                            </div><!-- /.card-header -->
+                            <div class="card-body">
+                                <div class="tab-content">
+									<div class="active tab-pane" id="activity">
+										<div class="form-group">
+											<label for="exampleInputEmail1">Tên sản phẩm</label>
+											<input asp-for="Title" class="form-control" placeholder="Tên sản phẩm" />
+											<span asp-validation-for="Title" class="text-danger"></span>
+										</div>
+
+										<div class="form-group">
+											<label for="exampleInputEmail1">Alias</label>
+											<input asp-for="Alias" class="form-control" placeholder="Alias" />
+											<span asp-validation-for="Alias" class="text-danger"></span>
+										</div>
+
+										<div class="form-group">
+											<label for="exampleInputEmail1">SKU</label>
+											<input asp-for="ProductCode" class="form-control" placeholder="SKU" />
+											<span asp-validation-for="ProductCode" class="text-danger"></span>
+										</div>
+
+										<div class="form-group">
+											<label for="exampleInputEmail1">Danh mục</label>
+											<select asp-for="ProductCategoryID" asp-items="Model.ProductCategories" class="form-control">
+												<option value="">-Chọn danh mục sản phẩm-</option>
+											</select>
+											<span asp-validation-for="ProductCategoryID" class="text-danger"></span>
+										</div>
+
+										<div class="form-group">
+											<label for="exampleInputEmail1">Mô tả</label>
+											<input asp-for="Description" class="form-control" placeholder="Mô tả" />
+											<span asp-validation-for="Description" class="text-danger"></span>
+										</div>
+
+
+										<div class="form-group">
+											<label asp-for="Detail">Chi tiết</label>
+											<textarea asp-for="Detail" class="form-control" id="txtDetail"></textarea>
+										</div>
+										<div class="row">
+											<div class="col-3">
+												<div class="form-group">
+													<label for="exampleInputEmail1">Số lượng</label>
+													<input asp-for="Quantity" class="form-control" />
+													<span asp-validation-for="Quantity" class="text-danger"></span>
+												</div>
+											</div>
+											<div class="col-3">
+												<div class="form-group">
+													<label for="exampleInputEmail1">Giá</label>
+													<input type="text" name="demoPrice" id="demoPrice" value="@Model.Price" class="form-control auto" data-a-dec="," data-a-sep="." />
+													<input asp-for="Price" type="hidden"  />
+													<span asp-validation-for="Price" class="text-danger"></span>
+												</div>
+											</div>
+											<div class="col-3">
+												<div class="form-group">
+													<label for="exampleInputEmail1">Giá khuyến mãi</label>
+													<input type="text" name="demoPriceSale" id="demoPriceSale" value="@Model.PriceSale" class="form-control auto" data-a-dec="," data-a-sep="." />
+													<input asp-for="PriceSale" type="hidden" />
+													<span asp-validation-for="PriceSale" class="text-danger"></span>
+												</div>
+											</div>
+											<div class="col-3">
+												<div class="form-group">
+													<label for="exampleInputEmail1">Giá nhập</label>
+													<input type="text" name="demoOriginalPrice" id="demoOriginalPrice" value="@Model.OriginalPrice" class="form-control auto" data-a-dec="," data-a-sep="." />
+													<input asp-for="OriginalPrice" type="hidden" />
+													<span asp-validation-for="OriginalPrice" class="text-danger"></span>
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-3">
+												<div class="form-group">
+													<div class="custom-control custom-checkbox">
+														<input asp-for="IsActive" class="custom-control-input" id="customCheckbox2" checked />
+														<label for="customCheckbox2" class="custom-control-label">Hiển thị</label>
+													</div>
+												</div>
+											</div>
+											<div class="col-3">
+												<div class="form-group">
+													<div class="custom-control custom-checkbox">
+														<input asp-for="IsHot" class="custom-control-input" id="IsHotCheckbox2" />
+														<label for="IsHotCheckbox2" class="custom-control-label">Hot</label>
+													</div>
+												</div>
+											</div>
+											<div class="col-3">
+												<div class="form-group">
+													<div class="custom-control custom-checkbox">
+														<input asp-for="IsFeature" class="custom-control-input" id="IsFeatureCheckbox" />
+														<label for="IsFeatureCheckbox" class="custom-control-label">Nổi bật</label>
+													</div>
+												</div>
+											</div>
+											<div class="col-3">
+												<div class="form-group">
+													<div class="custom-control custom-checkbox">
+														<input asp-for="IsSale" class="custom-control-input" id="IsSaleCheckbox" />
+														<label for="IsSaleCheckbox" class="custom-control-label">Khuyến mãi</label>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<!-- /.tab-pane -->
+									<div class="tab-pane" id="settings">
+										<form class="form-horizontal">
+											<div class="form-group">
+												<label asp-for="SeoTitle">Seo title</label>
+												<input asp-for="SeoTitle" class="form-control" />
+
+											</div>
+											<div class="form-group">
+												<label asp-for="SeoDescription">Seo Description</label>
+												<input asp-for="SeoDescription" class="form-control" />
+											</div>
+											<div class="form-group">
+												<label asp-for="SeoKeywords">SeoKeywords</label>
+												<input asp-for="SeoKeywords" class="form-control" />
+											</div>
+
+										</form>
+									</div>
+									<!-- /.tab-pane -->
+                                </div>
+                                <!-- /.tab-content -->
+                            </div><!-- /.card-body -->
+                            <div class="form-group">
+                                <button class="btn btn-primary">Cập nhật</button>
+                                <a href="~/admin/product" class="btn btn-danger">Quay lại</a>
+                            </div>
+                        </div>
+                        </form>
+                     
+                       
+
+                    
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+        </div>
+        <!-- /.card-footer-->
+    </div>
+
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('.auto').autoNumeric('init');
+            $('#demoPrice').bind('blur focusout keypress keyup', function () {
+                var demoGet = $('#demoPrice').autoNumeric('get');
+                $('#Price').val(demoGet);
+                $('#Price').autoNumeric('set', demoGet);
+            });
+            $('#demoPriceSale').bind('blur focusout keypress keyup', function () {
+                var demoGet = $('#demoPriceSale').autoNumeric('get');
+                $('#PriceSale').val(demoGet);
+                $('#PriceSale').autoNumeric('set', demoGet);
+            });
+            $('#demoOriginalPrice').bind('blur focusout keypress keyup', function () {
+                var demoGet = $('#demoOriginalPrice').autoNumeric('get');
+                $('#OriginalPrice').val(demoGet);
+                $('#OriginalPrice').autoNumeric('set', demoGet);
+            });
+            CKEDITOR.replace('txtDetail',{
+                customConfid: '/content/ckeditor/config.js',
+                extraAllowedContent: 'span',
+            });
+
+        });
+
+
+    </script>
+}
+
+

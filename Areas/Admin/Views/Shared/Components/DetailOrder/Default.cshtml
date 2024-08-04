@@ -1,0 +1,33 @@
+﻿@using ShoppingOnline.Helpers
+@model IEnumerable<OrderDetail>
+@if (Model != null && Model.Any())
+{
+    var i = 1;
+    <div class="form-group">
+        <table class="table table-bordered">
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Giá</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.Product.Title</td>
+                        <td>@item.Price</td>
+                        <td>@item.Quantity</td>
+                        <td>@Common.FormatNumber((item.Quantity * item.Price), 0)</td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+}

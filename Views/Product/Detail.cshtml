@@ -1,0 +1,246 @@
+﻿@model Product
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/single_styles.css">
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/single_responsive.css">
+<style>
+    .hidden-scrollbar {
+        overflow-y: scroll;
+        max-height: 550px;
+    }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .hidden-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .hidden-scrollbar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+
+</style>
+@if (Model != null)
+{
+    <div class="container single_product_container">
+        <div class="row">
+            <div class="col">
+
+                <!-- Breadcrumbs -->
+
+                <div class="breadcrumbs d-flex flex-row align-items-center">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/danh-muc-san-pham/@Model.ProductCategory.Alias-@Model.ProductCategory.Id"><i class="fa fa-angle-right" aria-hidden="true"></i>@Model.ProductCategory.Title</a></li>
+                        <li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>@Model.Title</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-7">
+                @if (Model.Image != null && Model.Image.Any())
+                {
+                    <div class="single_product_pics">
+                        <div class="row">
+                            <div class="col-lg-3 thumbnails_col order-lg-1 order-2">
+                                <div class="single_product_thumbnails hidden-scrollbar" >
+                                    <ul>
+                                        @foreach (var item in Model.ProductImage.Take(4))
+                                        {
+                                            if (item.IsDefault)
+                                            {
+                                                <li class="active"><img src="@item.Image" alt="" data-image="@item.Image" height="136"></li>
+                                            }
+                                            else
+                                            {
+                                                <li><img src="@item.Image" alt="" data-image="@item.Image" height="136"></li>
+                                            }
+
+                                        }
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-9 image_col order-lg-2 order-1">
+                                <div class="single_product_image">
+                                    <div class="single_product_image_background" style="background-image:url(@Model.ProductImage.FirstOrDefault(x=>x.IsDefault).Image)"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+            <div class="col-lg-5">
+                <div class="product_details">
+                    <div class="product_details_title">
+                        <h2>@Model.Title</h2>
+                        <p>@Model.Description</p>
+                        <p>Lượt xem: <b>@Model.ViewCount</b></p>
+                    </div>
+                    @*<div class="free_delivery d-flex flex-row align-items-center justify-content-center">
+                <span class="ti-truck"></span><span>free delivery</span>
+                </div>*@
+                    @if (Model.PriceSale > 0)
+                    {
+                        <div class="original_price">@ShoppingOnline.Helpers.Common.FormatNumber(Model.Price, 0)</div>
+                        <div class="product_price">@ShoppingOnline.Helpers.Common.FormatNumber(Model.PriceSale, 0)</div>
+                    }
+                    else
+                    {
+                        <div class="product_price">@ShoppingOnline.Helpers.Common.FormatNumber(Model.Price, 0)</div>
+                    }
+
+                    <ul class="star_rating">
+                        @{
+                            int countRate = ViewBag.CountRate != null ? ViewBag.CountRate : 0;
+                        }
+                        @Html.Raw(ShoppingOnline.Helpers.Common.HtmlRate(countRate))
+                        <li> <p>(@ViewBag.CountRate Rate)</p></li>
+                    </ul>
+
+
+
+                    @*<div class="product_color">
+                <span>Select Color:</span>
+                <ul>
+                <li style="background: #e54e5d"></li>
+                <li style="background: #252525"></li>
+                <li style="background: #60b3f3"></li>
+                </ul>
+                </div>*@
+                    <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
+                        <span>Quantity:</span>
+                        <div class="quantity_selector">
+                            <span class="minus"><i class="fa fa-minus" aria-hidden="true" id="quantity-minus"></i></span>
+                            <span id="quantity_value">1</span>
+                            <span class="plus"><i class="fa fa-plus" aria-hidden="true" id="quantity-plus"></i></span>
+                        </div>
+                        <div class="red_button add_to_cart_button"><a href="#" class="btnAddToCart" data-id="@Model.Id">add to cart</a></div>
+                        <div data-id="@Model.Id" class="favorite favorite_left product_favorite d-flex flex-column align-items-center justify-content-center"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Tabs -->
+    <div class="tabs_section_container">
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="tabs_container">
+                        <ul class="tabs d-flex flex-sm-row flex-column align-items-left align-items-md-center justify-content-center">
+                            <li class="tab active" data-active-tab="tab_1"><span>Description</span></li>
+                            @*<li class="tab" data-active-tab="tab_2"><span>Additional Information</span></li>*@
+                            <li class="tab" data-active-tab="tab_3" id="totalReview"><span>Reviews (@ViewBag.Count)</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+
+                    <!-- Tab Description -->
+
+                    <div id="tab_1" class="tab_container active">
+                        <div class="row">
+                            @Html.Raw(Model.Detail)
+                        </div>
+                    </div>
+
+                    <!-- Tab Additional Info -->
+                    <!-- Tab Reviews -->
+
+                    <div id="tab_3" class="tab_container">
+                        <div class="row" id="userReview">
+                            <!-- User Reviews -->
+                            <div class="col-lg-6 reviews_col" id="showReview">
+                                @await Component.InvokeAsync("PartialReview", new { productId = Model.Id })
+
+                                @* @Html.Action("Load_Review", "Review", new { productId = Model.Id }) *@
+                            </div>
+                            <!-- Add Review -->
+                            <div class="col-lg-6 reviews_col">
+                                <div id="load_send">
+                                </div>
+                                @await Component.InvokeAsync("Review", new { productId = Model.Id})
+
+                                @* @Html.Action("_Review", "Review", new { productId = Model.Id }); *@
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+
+@section scripts{
+    <script src="~/Content/assets/js/single_custom.js"></script>
+    @* <script src="~/Content/jsShopping.js"></script> *@
+    <script>
+
+        function OnBegin() {
+            $('#review_submit').attr("disabled", "disabled");
+            $('#loading').show();
+        }
+
+        function OnSuccess(res) {
+            $('#loading').hide();
+            //console.log("on success: " + res);
+            if (res.success) {
+                $('#review_submit').removeAttr("disabled");
+           
+                $("#review_form")[0].reset();
+                notyf.success("Gửi thành công!!");
+                countReview();
+                reloadReview();
+                //location.reload();
+            }
+            else {
+                notyf.error("Gửi thất bại!!");
+            }
+        }
+        function countReview() {
+            var productId = $('#product-id').val();
+            $.ajax({
+                url: "/review/getCountReview",
+                data: { proId: productId },
+                type: "GET",
+                success: function (rs) {
+                    $("#totalReview").html(`Reviews (${rs.count})`)
+                },
+            })
+        }
+        function reloadReview() {
+            var productId = $('#product-id').val();
+            //console.log("product id: " + productId);
+            $.ajax({
+                url: "/review/Partial_Load_Review",
+                type: "GET",
+                data: { proId: productId },
+                success: function (data) {
+                    // console.log("reload review: " + data);
+                    $("#showReview").html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error loading review:", error);
+                }
+            });
+        }
+    </script>
+}
+

@@ -1,0 +1,91 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using ShoppingOnline.ViewModels;
+@model OrderViewModel
+@inject SignInManager<AppUser> signInManager
+@inject UserManager<AppUser> userManager
+<link href="~/loading/loadinganimation.css" rel="stylesheet" />
+
+<form asp-action="CheckOut" asp-controller="ShoppingCart" id="myForm" method="post"
+      data-ajax="true"
+      data-ajax-method="POST"
+      data-ajax-begin="OnBeginCO"
+      data-ajax-success="OnSuccessCO"
+      data-ajax-failure="OnFailureCO">
+    
+    @Html.AntiForgeryToken()
+
+    <h3>Thông tin khách hàng</h3>
+
+    @if (!signInManager.IsSignedIn(User))
+    {
+        <div class="form-group">
+            <label asp-for="CustomerName">Họ tên khách hàng</label>
+            <input asp-for="CustomerName" class="form-control" autocomplete="off" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Phone">Số điện thoại</label>
+            <input asp-for="Phone" class="form-control" autocomplete="off" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Address">Địa chỉ</label>
+            <input asp-for="Address" class="form-control" autocomplete="off" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" class="form-control" autocomplete="off" />
+        </div>
+    }
+    else
+    {
+
+        var user = (AppUser)ViewBag.User; ;
+        
+
+        <div class="form-group">
+            <label asp-for="CustomerName">Họ tên khách hàng</label>
+            <input asp-for="CustomerName" value="@user.UserName" class="form-control" autocomplete="off" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Phone">Số điện thoại</label>
+            <input asp-for="Phone" value="@user.PhoneNumber" class="form-control" autocomplete="off" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Address">Địa chỉ</label>
+            <input asp-for="Address" class="form-control" autocomplete="off" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" value="@user.Email" class="form-control" autocomplete="off" />
+        </div>
+    }
+
+    <div class="form-group">
+        <label asp-for="TypePayment">Hình thức thanh toán</label>
+        <select asp-for="TypePayment" class="form-control" id="drTypePayment">
+            <option value="1" selected>COD</option>
+            <option value="2">Chuyển khoản</option>
+        </select>
+    </div>
+
+    <div class="form-group" id="load_form_payment" style="display:none;">
+        <h4><label>Chọn phương thức thanh toán:</label><br /></h4>
+        <h5>Cách 1: Chuyển hướng sang VNPAY chọn phương thức thanh toán</h5>
+        <label><input type="radio" name="TypePaymentVN" value="0" checked /> Cổng thanh toán VNPAYQR </label>
+        <h5>Cách 2: Tách phương thức thanh toán tại site của Merchant</h5>
+        <label><input type="radio" name="TypePaymentVN" value="1" /> Thanh toán qua ứng dụng hỗ trợ VNPAYQR </label><br />
+        <label><input type="radio" name="TypePaymentVN" value="2" /> ATM-Tài khoản ngân hàng nội địa </label><br />
+        <label><input type="radio" name="TypePaymentVN" value="3" /> Thanh toán qua thẻ quốc tế </label><br />
+    </div>
+
+    <div id="loading" class="loading-spinner" style="display:none;"></div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-block btn-success" id="btn-success">Đặt hàng</button>
+    </div>
+
+</form>
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha256-v2nySZafnswY87um3ymbg7p9f766IQspC5oqaqZVX2c=" crossorigin="anonymous"></script>
+    
+  
+}

@@ -1,0 +1,193 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<AppUser> SignInManager
+<!-- Sidebar -->
+<div class="sidebar">
+    <!-- Sidebar user (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+            <img src="~/Content/clients/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+            <a href="#" class="d-block">Alexander Pierce</a>
+        </div>
+    </div>
+
+    <!-- SidebarSearch Form -->
+    @*<div class="form-inline">
+    <div class="input-group" data-widget="sidebar-search">
+    <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+    <div class="input-group-append">
+    <button class="btn btn-sidebar">
+    <i class="fas fa-search fa-fw"></i>
+    </button>
+    </div>
+    </div>
+    </div>*@
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+            with font-awesome or any other icon font library -->
+            <li class="nav-item">
+                <a href="/admin/Category" class="nav-link">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>
+                        Danh mục
+                        @*<i class="right fas fa-angle-left"></i>*@
+                    </p>
+                </a>
+                @*<ul class="nav nav-treeview">
+                <li class="nav-item">
+                <a href="~/Content/clients/index.html" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Dashboard v1</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                <a href="~/Content/clients/index2.html" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Dashboard v2</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                <a href="~/Content/clients/index3.html" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Dashboard v3</p>
+                </a>
+                </li>
+                </ul>*@
+            </li>
+            <li class="nav-item">
+                <a href="/admin/role" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Role
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/news" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Tin tức
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/post" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Bài viết
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/contact" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Liên hệ
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/order" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Đơn hàng
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/posts" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Quảng cáo
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="admin/Category" class="nav-link">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>
+                        Quản lý sản phẩm
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="~/admin/productcategory" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Danh mục sản phẩm</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="~/admin/product" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Sản phẩm</p>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/statistical/index" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Thống kê doanh thu
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/SettingSystem/index" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Cấu hình hệ thống
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-area="Identity" asp-controller="Account" asp-action="Index" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Tài khoản
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
+            @if (!SignInManager.IsSignedIn(User))
+            {
+                <li class="nav-item">
+                    <a asp-area="Identity" asp-controller="Account" asp-action="Login" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Đăng nhập
+                            @*<span class="right badge badge-danger">New</span>*@
+                        </p>
+                    </a>
+                </li>
+            }
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <li class="nav-item">
+                    <form asp-controller="Account" asp-action="LogOff" asp-area="Identity" method="post" id="logOffForm">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="nav-link" style="background: none; border: none; padding: 0; cursor: pointer; text-align:left;padding-left:15px;color:white">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>Đăng xuất</p>
+                        </button>
+                    </form>
+                </li>
+            }
+    </nav>
+    <!-- /.sidebar-menu -->
+</div>
+<!-- /.sidebar -->

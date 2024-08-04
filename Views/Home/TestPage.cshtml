@@ -1,0 +1,77 @@
+﻿@* @using PagedList.Core
+@model IPagedList<int>
+
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css" asp-append-version="true">
+<link href="~/css/pagelist.css" rel="stylesheet" />
+<h1>Items List</h1>
+<h1>Items List</h1>
+<h1>Items List</h1>
+<h1>Items List</h1>
+<h1>Items List</h1>
+<ul>
+    @foreach (var item in Model)
+    {
+        <li>@item</li>
+    }
+</ul>
+
+<div class="row pagination-container">
+    <div class="col-6"></div>
+    <div class="col-6 pagination-controls">
+        @if (Model.HasPreviousPage)
+        {
+            <a href="?page=@(Model.PageNumber - 1)&pageSize=@Model.PageSize" class="page-link">Previous</a>
+        }
+
+        <span class="page-info">Page @Model.PageNumber of @Model.PageCount</span>
+
+        @if (Model.HasNextPage)
+        {
+            <a href="?page=@(Model.PageNumber + 1)&pageSize=@Model.PageSize" class="page-link">Next</a>
+        }
+    </div>
+</div>
+
+ *@
+ <h1 style="margin-top:200px">asddsa</h1>
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css" asp-append-version="true">
+<div id="result">
+    <form asp-action="AddProduct" asp-controller="Product" method="POST" 
+        data-ajax="true" 
+        data-ajax-method="POST" 
+        data-ajax-url="/Product/AddProduct" 
+        data-ajax-update="#result" 
+        data-ajax-loading="#loading" 
+        data-ajax-loading-duration="1000" 
+        data-ajax-begin="onBegin" 
+        data-ajax-complete="onComplete" 
+        data-ajax-failure="onFailure" 
+        data-ajax-success="onSuccess">
+        <input type="text" name="ProductName" placeholder="Product Name" />
+        <input type="number" name="Price" placeholder="Price" />
+        <button type="submit">Add Product</button>
+    </form>
+</div>
+
+<div id="loading" style="display:none;">Loading...</div>
+
+@section scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.js" integrity="sha256-v2nySZafnswY87um3ymbg7p9f766IQspC5oqaqZVX2c=" crossorigin="anonymous"></script>
+    <script>
+        function onBegin() {
+            console.log("AJAX request is starting.");
+        }
+
+        function onComplete() {
+            console.log("AJAX request is complete.");
+        }
+
+        function onFailure() {
+            console.log("AJAX request failed.");
+        }
+
+        function onSuccess() {
+            console.log("AJAX request succeeded.");
+        }
+    </script>
+}

@@ -1,0 +1,33 @@
+﻿.input-icon {
+    position: absolute;
+    right: 10px; /* Điều chỉnh khoảng cách từ cạnh phải của input */
+    top: 50%;
+    transform: translateY(-50%);
+    /* pointer-events: none; Để icon không ảnh hưởng đến việc nhập liệu */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+    .input-icon .fa {
+        font-size: 1rem;
+        color: #999;
+        margin-right: 5px;
+    }
+
+#Searchtext {
+    padding: 10px 20px 10px 20px;
+    border-radius: 20px;
+    width: 100%; /* Đảm bảo input chiếm toàn bộ chiều rộng của container */
+    box-sizing: border-box;
+}
+
+.input-wrapper {
+    width: 300px;
+    position: relative;
+}
+#inputSearch {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

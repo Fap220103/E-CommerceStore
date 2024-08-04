@@ -1,0 +1,20 @@
+﻿/* Định dạng cho span chứa văn bản trong các liên kết điều hướng */
+.nav-span-profile {
+    margin-left: 10px;
+    color: #333;
+    font-weight: 300;
+    font-size: 16px;
+    transition: color 0.3s ease; /* Thêm hiệu ứng chuyển màu cho văn bản */
+}
+
+/* Định dạng cho các biểu tượng trong liên kết điều hướng */
+.nav-icon-profile {
+    color: #333;
+    transition: color 0.3s ease; /* Thêm hiệu ứng chuyển màu cho biểu tượng */
+}
+
+/* Hiệu ứng hover cho cả span và biểu tượng */
+a:hover .nav-span-profile,
+a:hover .nav-icon-profile {
+    color: #fe6347;
+}

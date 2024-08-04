@@ -1,0 +1,48 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css" asp-append-version="true">
+<h1 style="margin-top:300px">Test Form</h1>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ví dụ data-ajax-mode: replace</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
+</head>
+<body>
+    <form asp-action="PostContact" asp-controller="Contact" method="post"
+          data-ajax="true"
+          data-ajax-method="POST"
+          data-ajax-url="/Contact/PostContact"
+          data-ajax-mode="replace"
+          data-ajax-update="#updateSection">
+        <div>
+            <input name="Name" placeholder="Name" required />
+            <input name="Email" placeholder="Email" required />
+            <textarea name="Message" placeholder="Message" rows="3" required></textarea>
+        </div>
+        <button type="submit">Gửi</button>
+    </form>
+
+    <div id="updateSection">
+        <!-- Nội dung sẽ bị thay thế khi phản hồi AJAX nhận được -->
+        <p>Nội dung cũ.</p>
+    </div>
+
+    <!-- Backend Response Simulation -->
+    <script>
+        $(document).ready(function () {
+            // Simulate AJAX response with a new content
+            $("form").on("submit", function (e) {
+                e.preventDefault();
+                $("#updateSection").html('<p>Nội dung mới đã được cập nhật!</p>');
+            });
+        });
+    </script>
+</body>
+</html>

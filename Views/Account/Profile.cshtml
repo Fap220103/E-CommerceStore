@@ -1,0 +1,201 @@
+﻿@model AppUser
+@{
+	ViewBag.Title = "Profile";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+<link href="~/loading/loadinganimation.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link href="~/myprofile/listprofile.css" rel="stylesheet" />
+<style>
+	.news_section_container {
+		margin-top: 180px;
+	}
+
+	.form-container {
+		background-color: #f8f9fa; /* Màu nền nhạt */
+		padding: 20px; /* Khoảng cách bên trong */
+		border-radius: 8px; /* Bo tròn các góc */
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+		max-width: 100%; /* Độ rộng tối đa */
+		margin: 0 auto; /* Canh giữa theo chiều ngang */
+		margin-top: 20px; /* Khoảng cách phía trên */
+	}
+
+</style>
+<div class="container news_section_container">
+	<div class="row">
+		<div class="col-md-2">
+		</div>
+		<div class="col-md-2">
+			<div class="myProfile">
+				<div class="topProfile">
+					@if (Model.Image == null)
+					{
+
+						<img src="~/Content/img/SanPham/h0.png" class="rounded-circle p-1 no-border" width="80" height="80" />
+					}
+					else
+					{
+						<img src="@Model.Image" class="rounded-circle p-1 no-border" width="80" height="80" />
+					}
+
+
+					<span id="topUserName">@Model.UserName</span>
+				</div>
+				<hr />
+				<div class="listProfile">
+					<nav class="mt-2">
+						<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+							<li class="nav-item">
+								<a href="#" class="nav-link nav-link-profile" id="changeProfile">
+									<i class="nav-icon fas fa-user nav-icon-profile"></i>
+									<span class="nav-span-profile">
+										Tài khoản của tôi
+										@*<span class="right badge badge-danger">New</span>*@
+									</span>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link nav-link-profile" id="myOrder">
+									<i class="nav-icon fas fa-shopping-cart nav-icon-profile"></i>
+									<span class="nav-span-profile">
+										Đơn mua
+										@*<span class="right badge badge-danger">New</span>*@
+									</span>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link nav-link-profile" id="changePass">
+									<i class="nav-icon fas fa-key nav-icon-profile"></i>
+									<span class="nav-span-profile">
+										Đổi mật khẩu
+										@*<span class="right badge badge-danger">New</span>*@
+									</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+
+				</div>
+			</div>
+		</div>
+		<div class="col-md-8" >
+			@* @await Component.InvokeAsync("ChangeProfile") *@
+			<div class="form-container" id="myProfile">
+				@await Component.InvokeAsync("ChangeProfile")
+			</div>
+
+		</div>
+		@* 	<div class="col-md-12">
+		<div>
+
+		@await Component.InvokeAsync("MyOrder")
+		</div>
+		</div> *@
+
+
+	</div>
+</div>
+@section scripts {
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha256-v2nySZafnswY87um3ymbg7p9f766IQspC5oqaqZVX2c=" crossorigin="anonymous"></script>
+	<script src="~/Content/assets/js/contact_custom.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+	<script>
+		$('body').on('click', '#changeProfile', function (e) {
+			e.preventDefault();
+			loadProfile();
+		});
+		$('body').on('click', '#changePass', function (e) {
+			e.preventDefault();
+			loadPass();
+		});
+		$('body').on('click', '#myOrder', function (e) {
+			e.preventDefault();
+			loadOrder();
+		});
+		function OnBeginCP() {
+			$('#btnSubmit').attr("disabled", "disabled");
+			// $('#load_send').html('<h2 style="color:red">Đang gửi.....</h2>');
+
+			$('#loading').show();
+		}
+
+		function OnSuccessCP(res) {
+			$('#btnSubmit').removeAttr("disabled");
+			$('#loading').hide();
+			if (res.success) {
+				$('#UserName').val(res.user.userName);
+				$('#topUserName').val(res.user.userName);
+				$('#PhoneNumber').val(res.user.phoneNumber);
+				notyf.success("Cập nhật thành công!!");
+			} else {
+				notyf.error("Có lỗi xảy ra trong quá trình cập nhật.");
+			}
+		}
+
+		function OnFailureCP() {
+			$('#btnSubmit').removeAttr("disabled");
+			$('#loading').hide();
+			notyf.error("Cập nhật thất bại!!");
+		}
+		function OnBeginCPs() {
+			$('#btnSubmit').attr("disabled", "disabled");
+			// $('#load_send').html('<h2 style="color:red">Đang gửi.....</h2>');
+
+			$('#loading').show();
+		}
+
+		function OnSuccessCPs(res) {
+			$('#btnSubmit').removeAttr("disabled");
+			$('#loading').hide();
+			if (res.success) {
+				$('#OldPassword').val('');
+				$('#NewPassword').val('');
+				$('#ConfirmPassword').val('');
+				notyf.success("Đổi mật khẩu thành công!!");
+			} else {
+				notyf.error("Có lỗi xảy ra trong quá trình cập nhật.");
+			}
+		}
+
+		function OnFailureCPs() {
+			$('#btnSubmit').removeAttr("disabled");
+			$('#loading').hide();
+			notyf.error("Đổi mật khẩu thất bại!!");
+		}
+		var loadFile = function (event) {
+			var image = document.getElementById('output');
+			image.src = URL.createObjectURL(event.target.files[0]);
+		};
+		function loadOrder() {
+			$.ajax({
+				url: '/account/myorder',
+				type: 'GET',
+				success: function (rs) {
+					$('#myProfile').html(rs);
+				}
+			})
+		}
+		function loadProfile() {
+			$.ajax({
+				url: '/account/partialchangeprofile',
+				type: 'GET',
+				success: function (rs) {
+					$('#myProfile').html(rs);
+				}
+			})
+		}
+		function loadPass() {
+			$.ajax({
+				url: '/account/partialchangepass',
+				type: 'GET',
+				success: function (rs) {
+					$('#myProfile').html(rs);
+				}
+			})
+		}
+
+	</script>
+}

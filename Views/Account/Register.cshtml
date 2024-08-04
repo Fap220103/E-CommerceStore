@@ -1,0 +1,40 @@
+﻿@using ShoppingOnline.ViewModels;
+@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Sign up";
+}
+
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css" asp-append-version="true">
+<div class="row" style="margin-top:160px">
+    <div class="col-md-6 offset-3">
+        <div class="row">        
+            <div class="col-md-8 offset-2">
+                <h2 id="title">@ViewBag.Title</h2>
+                <form asp-action="Register" asp-asp-controller="Account">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword" class="control-label"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group" style="margin-top:15px">                
+                             <input class="btn btn-outline-success float-right" type="submit" value="Sign up" />                     
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

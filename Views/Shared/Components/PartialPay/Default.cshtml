@@ -1,0 +1,31 @@
+﻿@model IEnumerable<ShoppingCartItem>
+@using ShoppingOnline.Helpers
+
+@if (Model != null && Model.Any())
+{
+    <h3>GIỎ HÀNG<span style="float:right;">@Model.Count()</span></h3>
+    var i = 0;
+    var tongtien = decimal.Zero;
+    <div style="border:1px solid #808080">
+        <table class="table">
+            @foreach (var item in Model)
+            {
+                tongtien += item.TotalPrice;
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@Common.FormatNumber(item.Price, 0)</td>
+                    <td>@item.Quantity</td>
+                </tr>
+            }
+            <tr>
+                <td>Tổng tiền</td>
+                <td>@Common.FormatNumber(tongtien, 0)</td>
+            </tr>
+        </table>
+    </div>
+
+}
+else
+{
+
+}

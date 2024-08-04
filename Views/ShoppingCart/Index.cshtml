@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Giỏ hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/categories_styles.css">
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/categories_responsive.css">
+
+<div class="container product_section_container">
+    <div class="row">
+        <div class="col product_section clearfix">
+
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li class="active">
+                        <a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Giỏ hàng</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Sidebar -->
+            <!-- Main Content -->
+            <div class="row">
+                <div class="col-md-12" id="load_data">
+                   @*  @await Html.PartialAsync("Partial_Item_Cart") *@
+                   @await Component.InvokeAsync("PartialCart")
+
+                </div>
+                <div class="col-md-12">
+                    <div class="text-right" style="text-align:right">
+                        <a href="#" class="btn btn-danger btnDeleteAll">Xóa All</a>
+                        <a href="/thanh-toan" class="btn btn-success" id="btnThanhToan">Thanh toán</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/assets/js/categories_custom.js"></script>
+}
+
