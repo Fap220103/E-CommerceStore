@@ -4,6 +4,8 @@
 * text=auto
 *.cs linguist-language=C#
 *.js linguist-vendored
+*.css linguist-vendored
+*.cshtml linguist-language=C#
 node_modules/* linguist-vendored
 wwwroot/* linguist-vendored
 
